@@ -30,27 +30,32 @@ jobs:
       - name: Ensure Remotion browser
         run: npx remotion browser ensure
 
-      - name: Generate AI narration and scene backgrounds (when API keys are configured)
+      - name: Install Edge TTS
+        run: python -m pip install --upgrade edge-tts
+
+      - name: Generate Russian narration and optional AI backgrounds
         env:
           FISH_API_KEY: ${{ secrets.FISH_API_KEY }}
           FISH_REFERENCE_ID: ${{ secrets.FISH_REFERENCE_ID }}
           FISH_MODEL: s2.1-pro-free
+          EDGE_TTS_VOICE: ru-RU-DmitryNeural
+          EDGE_TTS_RATE: +0%
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: |
-          if [ -n "$FISH_API_KEY" ] && [ -n "$FAL_KEY" ]; then
-            npm run generate:assets
-            echo "AI_MEDIA_READY=true" >> "$GITHUB_ENV"
+          npm run generate:assets
+          echo "VOICEOVER_READY=true" >> "$GITHUB_ENV"
+          if [ -n "$FAL_KEY" ]; then
+            echo "AI_VISUALS_READY=true" >> "$GITHUB_ENV"
           else
-            echo "AI_MEDIA_READY=false" >> "$GITHUB_ENV"
-            echo "AI provider secrets are not configured; rendering the built-in SVG fallback."
+            echo "AI_VISUALS_READY=false" >> "$GITHUB_ENV"
           fi
 
       - name: Render full episode
         run: |
-          if [ "$AI_MEDIA_READY" = "true" ]; then
+          if [ "$AI_VISUALS_READY" = "true" ]; then
             npm run render:ai
           else
-            npm run render:ci
+            npx remotion render src/index.ts Episode out/episode-01.mp4 --codec=h264 --crf=20 --concurrency=2 --props='{"voiceover":true,"aiVisuals":false}'
           fi
 
       - name: Upload MP4
