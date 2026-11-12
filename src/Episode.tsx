@@ -219,6 +219,18 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
   );
 };
 
+const Dust: React.FC<{frame:number}> = ({frame}) => (
+  <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0,pointerEvents:"none"}}>
+    {Array.from({length:34},(_,i)=>{
+      const x = (i*173 + Math.sin(frame/48+i*2.1)*28 + 1920) % 1920;
+      const y = (i*97 - frame*(0.18+(i%4)*0.08) + 1300) % 1080;
+      const r = 1.4 + (i%4)*0.65;
+      const opacity = 0.08 + ((i*7)%5)*0.025;
+      return <circle key={i} cx={x} cy={y} r={r} fill="#F5DCCB" opacity={opacity}/>;
+    })}
+  </svg>
+);
+
 const Scene: React.FC<{data:SceneData;index:number}> = ({data,index}) => {
   const frame = useCurrentFrame();
   const intro = interpolate(frame,[0,24],[0,1],{extrapolateRight:"clamp"});
@@ -234,9 +246,10 @@ const Scene: React.FC<{data:SceneData;index:number}> = ({data,index}) => {
         <rect width={W} height={H} fill="url(#shade)"/>
         <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#060914" stopOpacity=".2"/><stop offset=".7" stopColor="#060914" stopOpacity="0"/><stop offset="1" stopColor="#060914" stopOpacity=".55"/></linearGradient></defs>
       </svg>
-      <CharacterStage art={data.art} frame={frame}/>
+      <div style={{position:"absolute",inset:0,transform:`translateX(${cameraX}px) scale(${zoom})`,transformOrigin:"center center"}}><CharacterStage art={data.art} frame={frame}/></div>
       <AbsoluteFill style={{pointerEvents:"none",background:"radial-gradient(ellipse at 50% 42%, transparent 38%, rgba(3,5,14,.28) 100%)"}}/>
       <AbsoluteFill style={{pointerEvents:"none",background:"linear-gradient(180deg, rgba(3,5,14,.34) 0%, transparent 18%, transparent 76%, rgba(3,5,14,.42) 100%)"}}/>
+      <Dust frame={frame}/>
       <div style={{position:"absolute",top:0,left:0,right:0,height:22,background:"#050711",opacity:.72}}/>
       <div style={{position:"absolute",bottom:0,left:0,right:0,height:22,background:"#050711",opacity:.72}}/>
       <AbsoluteFill style={{justifyContent:"flex-end",padding:"0 120px 110px",opacity:intro*outro,transform:`translateY(${captionY}px)`}}>
