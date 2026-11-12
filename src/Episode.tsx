@@ -189,7 +189,8 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
         <Person x={1160-slide*.4} y={895-bob} scale={1.1} coat="#6A3C55" hair="#191A28" frame={frame} mood="calm" facing="left"/>
         <g transform="translate(1130 440)">
           <path d="M0 0 Q150 -80 300 0 L270 120 Q140 150 20 115Z" fill="#111827" opacity=".9"/>
-          <text x="150" y="52" textAnchor="middle" fill="#E7DDEB" fontSize="28">ОПЯТЬ РИСУЕШЬ?</text>
+          <text x="150" y="48" textAnchor="middle" fill="#E7DDEB" fontSize="25">ОПЯТЬ РИСУЕШЬ?</text>
+          <text x="150" y="84" textAnchor="middle" fill="#C7BDCF" fontSize="18">ХУДОЖНИК НАШЁЛСЯ.</text>
         </g>
       </>}
       {art === "meet" && <>
@@ -216,7 +217,10 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
           <rect width="330" height="220" rx="12" fill="#F3E9D8"/>
           <path d="M35 65 H280 M35 105 H240 M35 145 H260" stroke="#A7A0A0" strokeWidth="4" opacity=".6"/>
           <path d="M35 180 Q130 145 250 180" stroke="#9C6684" strokeWidth="5" fill="none"/>
-          <text x="165" y="45" textAnchor="middle" fill="#4B4353" fontSize="22">ДЛЯ ТЕБЯ</text>
+          <text x="165" y="48" textAnchor="middle" fill="#4B4353" fontSize="20" letterSpacing="3">ЛЕРА</text>
+          <text x="165" y="98" textAnchor="middle" fill="#4B4353" fontSize="23">Приходи в библиотеку.</text>
+          <text x="165" y="132" textAnchor="middle" fill="#4B4353" fontSize="21">Мне нужно спросить.</text>
+          <path d="M105 170 Q165 160 225 170" stroke="#A46E8A" strokeWidth="3" fill="none"/>
         </g>
       </>}
       {art === "reveal" && <>
@@ -238,7 +242,8 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
         <g transform="translate(980 430) rotate(-4)">
           <rect width="360" height="250" rx="10" fill="#F4EBDC"/>
           <path d="M45 70 H310 M45 112 H285 M45 154 H300" stroke="#A9A0A0" strokeWidth="4"/>
-          <text x="180" y="210" textAnchor="middle" fill="#7E4C6B" fontSize="25" fontWeight="bold">2019</text>
+          <text x="180" y="184" textAnchor="middle" fill="#7E4C6B" fontSize="22" letterSpacing="2">2019</text>
+          <text x="180" y="218" textAnchor="middle" fill="#4D4052" fontSize="16">ЕСЛИ ТЫ ЭТО ЧИТАЕШЬ...</text>
         </g>
         <circle cx="1450" cy="270" r="160" fill="#B18ABF" opacity={interpolate(frame,[0,SCENE],[0,.16],{extrapolateRight:"clamp"})}/>
       </>}
