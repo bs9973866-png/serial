@@ -42,6 +42,17 @@ const Person: React.FC<PersonProps> = ({
       <path d="M-43 -224 Q-48 -263 0 -267 Q49 -264 43 -224 L37 -190 Q27 -166 0 -164 Q-28 -166 -38 -190Z" fill={skin}/>
       <path d="M-46 -229 Q-57 -280 2 -280 Q58 -276 48 -222 L32 -237 Q11 -251 -12 -232 L-34 -210Z" fill={hair}/>
       <path d="M-43 -230 Q-61 -210 -43 -177 L-29 -190 L-31 -225 M35 -240 Q59 -221 43 -181 L30 -194Z" fill={hair}/>
+      {coat === "#B4A4C8" && <>
+        {/* Lera's long chestnut hair and signature star clip. */}
+        <path d="M-42 -232 Q-61 -213 -51 -164 L-46 -104 Q-29 -91 -22 -119 L-26 -197Z" fill={hair}/>
+        <path d="M39 -232 Q60 -210 52 -162 L46 -105 Q28 -91 22 -119 L27 -197Z" fill={hair}/>
+        <path d="M30 -247 L35 -236 L47 -235 L38 -227 L41 -215 L30 -221 L19 -215 L22 -227 L13 -235 L25 -236Z" fill="#F5D98A" stroke="#FFF0C4" strokeWidth="2"/>
+      </>}
+      {coat === "#6A3C55" && <>
+        {/* Kirill's small chain detail, a recurring backpack accessory motif. */}
+        <path d="M-15 -155 Q0 -130 15 -155" stroke="#C7C8D2" strokeWidth="3" fill="none"/>
+        <circle cx="0" cy="-128" r="7" fill="none" stroke="#D8D9E2" strokeWidth="3"/>
+      </>}
       <path d="M-23 -214 Q-13 -220 -5 -214 M12 -214 Q22 -220 30 -213" stroke="#3A2930" strokeWidth="4" fill="none" strokeLinecap="round"/>
       <circle cx="-14" cy="-207" r="3" fill="#282333" opacity={blink}/><circle cx="20" cy="-207" r="3" fill="#282333" opacity={blink}/>
       <path d={mood === "smile" ? "M-9 -184 Q2 -173 14 -184" : mood === "sad" ? "M-8 -177 Q2 -184 13 -177" : "M-8 -180 L13 -180"} stroke="#8A4F55" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
