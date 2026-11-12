@@ -13,7 +13,7 @@ Build assets in this order to reduce continuity problems:
 1. **Character reference sheets** — Artem, Lera, and Kirill. Approve face, hair, clothing, proportions, and accessories before generating scenes.
 2. **Location backgrounds** — classroom, hallway, library, and Artem's evening room.
 3. **Story props** — the window sketch and blank note-paper textures.
-4. **Shot artwork** — only after the references are stable, generate the 10 scene compositions using the shot prompts in `docs/shot-prompts-episode-01.md`.
+4. **Shot artwork** — only after the references are stable, generate the 15 scene compositions using the shot prompts in `docs/shot-prompts-episode-01.md`.
 
 ## File contract
 
