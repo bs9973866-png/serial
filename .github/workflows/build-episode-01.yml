@@ -1,0 +1,43 @@
+name: Build episode 01
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: TypeScript check
+        run: npm run typecheck
+
+      - name: Ensure Remotion browser
+        run: npx remotion browser ensure
+
+      - name: Render full episode
+        run: npm run render:ci
+
+      - name: Upload MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: chuzhaya-parta-episode-01
+          path: out/episode-01.mp4
+          if-no-files-found: error
+          retention-days: 14
