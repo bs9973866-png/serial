@@ -1,0 +1,10 @@
+node_modules/
+out/
+.cache/
+dist/
+.env
+.env.*
+!.env.example
+public/assets/audio/*.mp3
+public/assets/scenes/*.png
+.DS_Store
