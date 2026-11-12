@@ -31,7 +31,7 @@ Place approved visual assets in this directory. Keep filenames stable so the Rem
 ## Generated episode media
 
 The generation script writes these optional files automatically:
-- `audio/scene-01.mp3` through `audio/scene-10.mp3` — Fish Audio Russian narration, one segment per scene.
-- `scenes/scene-01.png` through `scenes/scene-10.png` — fal.ai / FLUX cinematic environment backgrounds.
+- `audio/scene-01.mp3` through `audio/scene-15.mp3` — Russian narration (Edge TTS with gTTS/eSpeak fallbacks), one segment per scene.
+- `scenes/scene-01.png` through `scenes/scene-15.png` — fal.ai / FLUX cinematic environment backgrounds.
 
 Do not add API keys to this folder or commit them. The Remotion composition loads these files only when the AI render props are enabled.
