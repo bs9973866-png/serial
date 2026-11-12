@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "remotion studio",
+    "dev": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit",
     "render": "remotion render src/index.ts Episode out/episode-01.mp4",
+    "render:ci": "remotion render src/index.ts Episode out/episode-01.mp4 --codec=h264 --crf=20 --concurrency=2",
     "still": "remotion still src/index.ts Episode out/episode-01-poster.png"
   },
   "dependencies": {
