@@ -1,5 +1,5 @@
 import React from "react";
-import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from "remotion";
+import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame} from "remotion";
 
 const W = 1920;
 const H = 1080;
@@ -280,7 +280,7 @@ const Dust: React.FC<{frame:number}> = ({frame}) => (
   </svg>
 );
 
-const Scene: React.FC<{data:SceneData;index:number}> = ({data,index}) => {
+const Scene: React.FC<{data:SceneData;index:number;voiceover?:boolean;aiVisuals?:boolean}> = ({data,index,voiceover=false,aiVisuals=false}) => {
   const frame = useCurrentFrame();
   const intro = interpolate(frame,[0,24],[0,1],{extrapolateRight:"clamp"});
   const outro = interpolate(frame,[SCENE-24,SCENE],[1,0],{extrapolateLeft:"clamp"});
@@ -307,8 +307,9 @@ const Scene: React.FC<{data:SceneData;index:number}> = ({data,index}) => {
   const captionY = interpolate(frame,[8,30],[70,0],{extrapolateRight:"clamp"});
   return (
     <AbsoluteFill style={{backgroundColor:"#101525",overflow:"hidden"}}>
+      {voiceover && <Audio src={staticFile(`assets/audio/scene-${String(index+1).padStart(2,"0")}.mp3`)} /> }
       <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0,transform:`translate(${cameraX}px, ${cameraY}px) scale(${zoom})`,transformOrigin:"center center"}}>
-        <Backdrop place={data.place} frame={frame}/>
+        {aiVisuals ? <image href={staticFile(`assets/scenes/scene-${String(index+1).padStart(2,"0")}.png`)} x="0" y="0" width={W} height={H} preserveAspectRatio="xMidYMid slice"/> : <Backdrop place={data.place} frame={frame}/>}
         <rect width={W} height={H} fill="#080C18" opacity=".22"/>
         <rect width={W} height={H} fill="url(#shade)"/>
         <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#060914" stopOpacity=".2"/><stop offset=".7" stopColor="#060914" stopOpacity="0"/><stop offset="1" stopColor="#060914" stopOpacity=".55"/></linearGradient></defs>
@@ -354,13 +355,13 @@ const Closing: React.FC = () => {
   </AbsoluteFill>;
 };
 
-export const Episode: React.FC = () => {
+export const Episode: React.FC<{voiceover?:boolean;aiVisuals?:boolean}> = ({voiceover=false,aiVisuals=false}) => {
   return (
     <AbsoluteFill style={{background:"#080B15"}}>
       <Sequence from={0} durationInFrames={150}><Opening/></Sequence>
       {scenes.map((scene,i)=>(
         <Sequence key={i} from={150+i*SCENE} durationInFrames={SCENE}>
-          <Scene data={scene} index={i}/>
+          <Scene data={scene} index={i} voiceover={voiceover} aiVisuals={aiVisuals}/>
         </Sequence>
       ))}
       <Sequence from={150+scenes.length*SCENE} durationInFrames={150}><Closing/></Sequence>
