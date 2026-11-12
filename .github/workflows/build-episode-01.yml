@@ -30,8 +30,28 @@ jobs:
       - name: Ensure Remotion browser
         run: npx remotion browser ensure
 
+      - name: Generate AI narration and scene backgrounds (when API keys are configured)
+        env:
+          FISH_API_KEY: ${{ secrets.FISH_API_KEY }}
+          FISH_REFERENCE_ID: ${{ secrets.FISH_REFERENCE_ID }}
+          FISH_MODEL: s2.1-pro-free
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: |
+          if [ -n "$FISH_API_KEY" ] && [ -n "$FAL_KEY" ]; then
+            npm run generate:assets
+            echo "AI_MEDIA_READY=true" >> "$GITHUB_ENV"
+          else
+            echo "AI_MEDIA_READY=false" >> "$GITHUB_ENV"
+            echo "AI provider secrets are not configured; rendering the built-in SVG fallback."
+          fi
+
       - name: Render full episode
-        run: npm run render:ci
+        run: |
+          if [ "$AI_MEDIA_READY" = "true" ]; then
+            npm run render:ai
+          else
+            npm run render:ci
+          fi
 
       - name: Upload MP4
         uses: actions/upload-artifact@v4
