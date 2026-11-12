@@ -179,8 +179,13 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
     <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0}}>
       {art === "alone" && <>
         <Person x={690} y={890+bob} scale={1.18} coat="#303C58" hair="#25202B" frame={frame} mood="sad"/>
-        <g transform="translate(840 710) rotate(-5)">
-          <rect width="200" height="150" rx="12" fill="#E9E3D6"/><path d="M28 112 Q70 35 120 80 T175 38" stroke="#6D7895" strokeWidth="7" fill="none"/>
+        <g transform={`translate(840 710) rotate(-5) scale(${interpolate(frame,[0,SCENE],[.92,1],{extrapolateRight:"clamp"})})`}>
+          <rect width="200" height="150" rx="12" fill="#E9E3D6"/>
+          <rect x="12" y="12" width="176" height="126" rx="5" fill="#F4F0E8"/>
+          <path d="M28 112 V42 H102 V112 M28 76 H102 M65 42 V112" stroke="#78869B" strokeWidth="4" fill="none"/>
+          <path d="M108 112 Q130 82 150 93 T178 55" stroke="#6D7895" strokeWidth="4" fill="none"/>
+          <path d="M20 20 V130" stroke="#C18FA7" strokeWidth="2" opacity=".7"/>
+          <path d="M40 122 H170" stroke="#A8A2A0" strokeWidth="2" opacity=".55"/>
         </g>
         <path d="M1020 180 Q1260 80 1430 200" stroke="#9AA9C6" strokeWidth="3" strokeDasharray="8 18" opacity=".35" fill="none"/>
       </>}
@@ -242,6 +247,7 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
         <g transform="translate(980 430) rotate(-4)">
           <rect width="360" height="250" rx="10" fill="#F4EBDC"/>
           <path d="M45 70 H310 M45 112 H285 M45 154 H300" stroke="#A9A0A0" strokeWidth="4"/>
+          <path d="M52 38 Q115 22 168 38" stroke="#B78BA3" strokeWidth="3" fill="none" opacity=".8"/>
           <text x="180" y="184" textAnchor="middle" fill="#7E4C6B" fontSize="22" letterSpacing="2">2019</text>
           <text x="180" y="218" textAnchor="middle" fill="#4D4052" fontSize="16">ЕСЛИ ТЫ ЭТО ЧИТАЕШЬ...</text>
         </g>
