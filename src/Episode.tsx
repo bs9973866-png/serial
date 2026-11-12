@@ -96,6 +96,31 @@ const Backdrop: React.FC<{place:number;frame:number}> = ({place,frame}) => {
       <text x="960" y="90" textAnchor="middle" fill="#AEBBD4" fontSize="23" letterSpacing="12">КОРИДОР</text>
     </g>;
   }
+  if (place === 9) {
+    const lampPulse = 0.78 + Math.sin(frame/31)*0.035;
+    return <g>
+      <rect width={W} height={H} fill="#0B1020"/>
+      <rect y="0" width={W} height="780" fill="#151A2D"/>
+      <path d="M0 780 H1920 V1080 H0Z" fill="#272438"/>
+      <rect x="1280" y="110" width="390" height="410" rx="10" fill="#0B1020"/>
+      <rect x="1298" y="128" width="354" height="374" rx="5" fill="#26334A"/>
+      <path d="M1475 128 V502 M1298 315 H1652" stroke="#75819B" strokeWidth="8" opacity=".5"/>
+      <path d="M1298 360 Q1450 285 1652 375 V502 H1298Z" fill="#6B6381" opacity=".28"/>
+      <rect x="260" y="560" width="900" height="32" rx="8" fill="#59475A"/>
+      <rect x="300" y="592" width="28" height="260" fill="#44394D"/>
+      <rect x="1090" y="592" width="28" height="260" fill="#44394D"/>
+      <rect x="340" y="480" width="145" height="80" rx="8" fill="#B48C75" opacity=".35"/>
+      <path d="M410 480 Q420 390 470 405 Q505 420 485 480Z" fill="#6F806F"/>
+      <path d="M410 480 Q365 420 380 395 Q420 385 440 450" fill="#809078"/>
+      <rect x="760" y="490" width="250" height="70" rx="8" fill="#D8C9B3"/>
+      <path d="M785 510 H980 M785 530 H940" stroke="#9E8D84" strokeWidth="4" opacity=".7"/>
+      <path d="M1420 630 L1420 400 L1540 400 L1540 630Z" fill="#3B354A"/>
+      <path d="M1480 400 L1480 270" stroke="#D7A77D" strokeWidth="13"/>
+      <path d="M1410 275 Q1480 210 1550 275 L1530 300 H1430Z" fill="#E5B98C" opacity={lampPulse}/>
+      <ellipse cx="1480" cy="360" rx="210" ry="250" fill="#E6B17D" opacity=".07"/>
+      <text x="960" y="90" textAnchor="middle" fill="#AEBBD4" fontSize="23" letterSpacing="12">КОМНАТА АРТЁМА</text>
+    </g>;
+  }
   if (place === 3 || place === 7) {
     return <g>
       <rect width={W} height={H} fill="#101A2B"/>
