@@ -13,7 +13,7 @@ type PersonProps = {
 };
 
 const Person: React.FC<PersonProps> = ({
-  x,y,scale=1,coat,hair,skin="#E8B99B",facing="right",frame={frame} mood="calm",accent="#F4D7C5",frame=0
+  x,y,scale=1,coat,hair,skin="#E8B99B",facing="right",mood="calm",accent="#F4D7C5",frame=0
 }) => {
   const flip = facing === "left" ? -1 : 1;
   const blink = Math.sin(frame / 53) > 0.985 ? 0.12 : 1;
