@@ -9,15 +9,17 @@ const SCENE = 32 * FPS;
 type PersonProps = {
   x: number; y: number; scale?: number; coat: string; hair: string;
   skin?: string; facing?: "left" | "right"; mood?: "calm" | "sad" | "smile";
-  accent?: string;
+  accent?: string; frame?: number;
 };
 
 const Person: React.FC<PersonProps> = ({
-  x,y,scale=1,coat,hair,skin="#E8B99B",facing="right",mood="calm",accent="#F4D7C5"
+  x,y,scale=1,coat,hair,skin="#E8B99B",facing="right",frame={frame} mood="calm",accent="#F4D7C5",frame=0
 }) => {
   const flip = facing === "left" ? -1 : 1;
+  const blink = Math.sin(frame / 53) > 0.985 ? 0.12 : 1;
+  const sway = Math.sin(frame / 41) * 0.65;
   return (
-    <g transform={`translate(${x} ${y}) scale(${scale * flip} ${scale})`}>
+    <g transform={`translate(${x} ${y}) rotate(${sway}) scale(${scale * flip} ${scale})`}>
       <ellipse cx="0" cy="0" rx="91" ry="19" fill="#080916" opacity=".38"/>
       {/* Legs, shoes and layered clothing give the characters a solid silhouette. */}
       <path d="M-43 -78 L-48 -12 Q-49 0 -34 0 L-13 0 L-7 -75Z" fill="#252B40"/>
@@ -41,7 +43,7 @@ const Person: React.FC<PersonProps> = ({
       <path d="M-46 -229 Q-57 -280 2 -280 Q58 -276 48 -222 L32 -237 Q11 -251 -12 -232 L-34 -210Z" fill={hair}/>
       <path d="M-43 -230 Q-61 -210 -43 -177 L-29 -190 L-31 -225 M35 -240 Q59 -221 43 -181 L30 -194Z" fill={hair}/>
       <path d="M-23 -214 Q-13 -220 -5 -214 M12 -214 Q22 -220 30 -213" stroke="#3A2930" strokeWidth="4" fill="none" strokeLinecap="round"/>
-      <circle cx="-14" cy="-207" r="3" fill="#282333"/><circle cx="20" cy="-207" r="3" fill="#282333"/>
+      <circle cx="-14" cy="-207" r="3" fill="#282333" opacity={blink}/><circle cx="20" cy="-207" r="3" fill="#282333" opacity={blink}/>
       <path d={mood === "smile" ? "M-9 -184 Q2 -173 14 -184" : mood === "sad" ? "M-8 -177 Q2 -184 13 -177" : "M-8 -180 L13 -180"} stroke="#8A4F55" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
       <path d="M-28 -155 L0 -132 L29 -155" fill="none" stroke={accent} strokeWidth="5" opacity=".8"/>
       <path d="M-24 -122 L-5 -108 L-24 -91 M24 -122 L5 -108 L24 -91" stroke={accent} strokeWidth="4" fill="none" opacity=".7"/>
@@ -176,31 +178,31 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
   return (
     <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0}}>
       {art === "alone" && <>
-        <Person x={690} y={890+bob} scale={1.18} coat="#303C58" hair="#25202B" mood="sad"/>
+        <Person x={690} y={890+bob} scale={1.18} coat="#303C58" hair="#25202B" frame={frame} mood="sad"/>
         <g transform="translate(840 710) rotate(-5)">
           <rect width="200" height="150" rx="12" fill="#E9E3D6"/><path d="M28 112 Q70 35 120 80 T175 38" stroke="#6D7895" strokeWidth="7" fill="none"/>
         </g>
         <path d="M1020 180 Q1260 80 1430 200" stroke="#9AA9C6" strokeWidth="3" strokeDasharray="8 18" opacity=".35" fill="none"/>
       </>}
       {art === "tease" && <>
-        <Person x={620+slide} y={895+bob} scale={1.08} coat="#303C58" hair="#25202B" mood="sad"/>
-        <Person x={1160-slide*.4} y={895-bob} scale={1.1} coat="#6A3C55" hair="#191A28" mood="calm" facing="left"/>
+        <Person x={620+slide} y={895+bob} scale={1.08} coat="#303C58" hair="#25202B" frame={frame} mood="sad"/>
+        <Person x={1160-slide*.4} y={895-bob} scale={1.1} coat="#6A3C55" hair="#191A28" frame={frame} mood="calm" facing="left"/>
         <g transform="translate(1130 440)">
           <path d="M0 0 Q150 -80 300 0 L270 120 Q140 150 20 115Z" fill="#111827" opacity=".9"/>
           <text x="150" y="52" textAnchor="middle" fill="#E7DDEB" fontSize="28">ОПЯТЬ РИСУЕШЬ?</text>
         </g>
       </>}
       {art === "meet" && <>
-        <Person x={690} y={895+bob} scale={1.12} coat="#303C58" hair="#25202B" mood="calm"/>
-        <Person x={1220-interpolate(frame,[0,SCENE],[160,0],{extrapolateRight:"clamp"})} y={895-bob} scale={1.1} coat="#B4A4C8" hair="#6A4358" mood="smile" facing="left" accent="#F5D7E8"/>
+        <Person x={690} y={895+bob} scale={1.12} coat="#303C58" hair="#25202B" frame={frame} mood="calm"/>
+        <Person x={1220-interpolate(frame,[0,SCENE],[160,0],{extrapolateRight:"clamp"})} y={895-bob} scale={1.1} coat="#B4A4C8" hair="#6A4358" frame={frame} mood="smile" facing="left" accent="#F5D7E8"/>
         <g transform="translate(950 405)">
           <rect width="350" height="105" rx="24" fill="#F1EAF0"/><path d="M42 105 L25 142 L90 105" fill="#F1EAF0"/>
           <text x="175" y="66" textAnchor="middle" fill="#343046" fontSize="32">Здесь занято?</text>
         </g>
       </>}
       {art === "talk" && <>
-        <Person x={670} y={900+bob} scale={1.12} coat="#303C58" hair="#25202B" mood="calm"/>
-        <Person x={1200} y={900-bob} scale={1.12} coat="#B4A4C8" hair="#6A4358" mood="smile" facing="left" accent="#F5D7E8"/>
+        <Person x={670} y={900+bob} scale={1.12} coat="#303C58" hair="#25202B" frame={frame} mood="calm"/>
+        <Person x={1200} y={900-bob} scale={1.12} coat="#B4A4C8" hair="#6A4358" frame={frame} mood="smile" facing="left" accent="#F5D7E8"/>
         <g transform="translate(720 360)">
           <rect width="480" height="210" rx="18" fill="#E8E3DB"/>
           <rect x="24" y="24" width="432" height="162" rx="8" fill="#C7D1D8"/>
@@ -209,7 +211,7 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
         </g>
       </>}
       {art === "note" && <>
-        <Person x={710} y={900+bob} scale={1.14} coat="#303C58" hair="#25202B" mood="sad"/>
+        <Person x={710} y={900+bob} scale={1.14} coat="#303C58" hair="#25202B" frame={frame} mood="sad"/>
         <g transform={`translate(${1020} ${650+Math.sin(frame/20)*8}) rotate(-7)`}>
           <rect width="330" height="220" rx="12" fill="#F3E9D8"/>
           <path d="M35 65 H280 M35 105 H240 M35 145 H260" stroke="#A7A0A0" strokeWidth="4" opacity=".6"/>
@@ -218,8 +220,8 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
         </g>
       </>}
       {art === "reveal" && <>
-        <Person x={690} y={900+bob} scale={1.1} coat="#303C58" hair="#25202B" mood="calm"/>
-        <Person x={1220} y={900-bob} scale={1.1} coat="#B4A4C8" hair="#6A4358" mood="sad" facing="left" accent="#F5D7E8"/>
+        <Person x={690} y={900+bob} scale={1.1} coat="#303C58" hair="#25202B" frame={frame} mood="calm"/>
+        <Person x={1220} y={900-bob} scale={1.1} coat="#B4A4C8" hair="#6A4358" frame={frame} mood="sad" facing="left" accent="#F5D7E8"/>
         <g transform="translate(820 390) rotate(3)">
           <rect width="330" height="245" rx="8" fill="#EEE7D9"/>
           <rect x="18" y="18" width="294" height="209" rx="4" fill="#C6D3D8"/>
@@ -228,11 +230,11 @@ const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,fram
         </g>
       </>}
       {art === "walk" && <>
-        <Person x={690+Math.sin(frame/15)*25} y={900+bob} scale={1.08} coat="#303C58" hair="#25202B" mood="calm"/>
-        <Person x={1160+Math.sin(frame/15)*25} y={900-bob} scale={1.08} coat="#B4A4C8" hair="#6A4358" mood="smile" facing="left" accent="#F5D7E8"/>
+        <Person x={690+Math.sin(frame/15)*25} y={900+bob} scale={1.08} coat="#303C58" hair="#25202B" frame={frame} mood="calm"/>
+        <Person x={1160+Math.sin(frame/15)*25} y={900-bob} scale={1.08} coat="#B4A4C8" hair="#6A4358" frame={frame} mood="smile" facing="left" accent="#F5D7E8"/>
       </>}
       {art === "end" && <>
-        <Person x={700} y={900+bob} scale={1.1} coat="#303C58" hair="#25202B" mood="sad"/>
+        <Person x={700} y={900+bob} scale={1.1} coat="#303C58" hair="#25202B" frame={frame} mood="sad"/>
         <g transform="translate(980 430) rotate(-4)">
           <rect width="360" height="250" rx="10" fill="#F4EBDC"/>
           <path d="M45 70 H310 M45 112 H285 M45 154 H300" stroke="#A9A0A0" strokeWidth="4"/>
