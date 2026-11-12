@@ -1,5 +1,6 @@
 import {mkdir, readFile, writeFile} from "node:fs/promises";
 import path from "node:path";
+import {spawnSync} from "node:child_process";
 
 const root = process.cwd();
 
@@ -63,6 +64,18 @@ async function saveFishAudio(index, text) {
   await writeFile(path.join(audioDir, `scene-${String(index).padStart(2, "0")}.mp3`), bytes);
 }
 
+function saveEdgeTTS(index, text) {
+  const output = path.join(audioDir, `scene-${String(index).padStart(2, "0")}.mp3`);
+  const args = ["-m", "edge_tts", "--voice", process.env.EDGE_TTS_VOICE || "ru-RU-DmitryNeural", "--rate", process.env.EDGE_TTS_RATE || "+0%", "--text", text, "--write-media", output];
+  const candidates = process.platform === "win32" ? ["py", "python"] : ["python3", "python"];
+  let lastError = "";
+  for (const executable of candidates) {
+    const result = spawnSync(executable, args, {encoding: "utf8"});
+    if (!result.error && result.status === 0) return;
+    lastError = result.error?.message || result.stderr || result.stdout || `exit code ${result.status}`;
+  }
+  throw new Error(`Edge TTS failed for scene ${index}. Install it with: python -m pip install edge-tts. Details: ${lastError}`);
+}
 async function saveFalImage(index, prompt) {
   const response = await fetch(process.env.FAL_ENDPOINT || "https://fal.run/fal-ai/flux-2", {
     method: "POST",
@@ -88,19 +101,24 @@ async function saveFalImage(index, prompt) {
   await writeFile(path.join(sceneDir, `scene-${String(index).padStart(2, "0")}.png`), Buffer.from(await imageResponse.arrayBuffer()));
 }
 
-if (!process.env.FISH_API_KEY || !process.env.FAL_KEY) {
-  console.error("Set both FISH_API_KEY and FAL_KEY. See .env.example.");
-  process.exit(1);
-}
-
 await mkdir(audioDir, {recursive: true});
 await mkdir(sceneDir, {recursive: true});
 
 for (let i = 0; i < 10; i++) {
-  console.log(`[${i + 1}/10] Generating Russian narration with Fish Audio...`);
-  await saveFishAudio(i + 1, narration[i]);
-  console.log(`[${i + 1}/10] Generating cinematic background with fal.ai...`);
-  await saveFalImage(i + 1, scenePrompts[i]);
+  if (process.env.FISH_API_KEY) {
+    console.log(`[${i + 1}/10] Generating Russian narration with Fish Audio...`);
+    await saveFishAudio(i + 1, narration[i]);
+  } else {
+    console.log(`[${i + 1}/10] Generating Russian narration with Edge TTS (${process.env.EDGE_TTS_VOICE || "ru-RU-DmitryNeural"})...`);
+    saveEdgeTTS(i + 1, narration[i]);
+  }
+
+  if (process.env.FAL_KEY) {
+    console.log(`[${i + 1}/10] Generating cinematic background with fal.ai...`);
+    await saveFalImage(i + 1, scenePrompts[i]);
+  } else {
+    console.log(`[${i + 1}/10] No FAL_KEY: keeping the built-in animated SVG background.`);
+  }
 }
 
-console.log("All 10 voice segments and 10 AI scene backgrounds are ready.");
+console.log("Narration generation complete. AI backgrounds are generated only when FAL_KEY is configured.");
