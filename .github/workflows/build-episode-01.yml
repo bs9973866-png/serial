@@ -30,8 +30,11 @@ jobs:
       - name: Ensure Remotion browser
         run: npx remotion browser ensure
 
-      - name: Install Edge TTS
-        run: python -m pip install --upgrade edge-tts
+      - name: Install speech engines
+        run: |
+          python -m pip install --upgrade edge-tts gTTS
+          sudo apt-get update
+          sudo apt-get install -y espeak-ng ffmpeg
 
       - name: Generate Russian narration and optional AI backgrounds
         env:
