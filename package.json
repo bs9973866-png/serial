@@ -7,7 +7,9 @@
     "typecheck": "tsc --noEmit",
     "render": "remotion render src/index.ts Episode out/episode-01.mp4",
     "render:ci": "remotion render src/index.ts Episode out/episode-01.mp4 --codec=h264 --crf=20 --concurrency=2",
-    "still": "remotion still src/index.ts Episode out/episode-01-poster.png"
+    "still": "remotion still src/index.ts Episode out/episode-01-poster.png",
+    "generate:assets": "node scripts/generate-episode-assets.mjs",
+    "render:ai": "remotion render src/index.ts Episode out/episode-01.mp4 --codec=h264 --crf=20 --concurrency=2 --props='{\"voiceover\":true,\"aiVisuals\":true}'"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",
