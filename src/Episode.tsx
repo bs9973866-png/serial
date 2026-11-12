@@ -284,18 +284,36 @@ const Scene: React.FC<{data:SceneData;index:number}> = ({data,index}) => {
   const frame = useCurrentFrame();
   const intro = interpolate(frame,[0,24],[0,1],{extrapolateRight:"clamp"});
   const outro = interpolate(frame,[SCENE-24,SCENE],[1,0],{extrapolateLeft:"clamp"});
-  const zoom = interpolate(frame,[0,SCENE],[1.055,1.015],{extrapolateRight:"clamp"});
-  const cameraX = interpolate(frame,[0,SCENE],[18,-18],{extrapolateRight:"clamp"});
+  // Each scene gets its own slow camera move. The same transform is
+  // applied to the background and character layer to keep them registered.
+  const move = index % 4;
+  const zoom = move === 0
+    ? interpolate(frame,[0,SCENE*.48,SCENE],[1.035,1.075,1.025],{extrapolateRight:"clamp"})
+    : move === 1
+      ? interpolate(frame,[0,SCENE*.55,SCENE],[1.075,1.035,1.06],{extrapolateRight:"clamp"})
+      : move === 2
+        ? interpolate(frame,[0,SCENE*.42,SCENE],[1.025,1.065,1.045],{extrapolateRight:"clamp"})
+        : interpolate(frame,[0,SCENE*.6,SCENE],[1.06,1.025,1.07],{extrapolateRight:"clamp"});
+  const cameraX = move === 0
+    ? interpolate(frame,[0,SCENE],[26,-20],{extrapolateRight:"clamp"})
+    : move === 1
+      ? interpolate(frame,[0,SCENE],[-22,24],{extrapolateRight:"clamp"})
+      : move === 2
+        ? interpolate(frame,[0,SCENE],[8,-30],{extrapolateRight:"clamp"})
+        : interpolate(frame,[0,SCENE],[-12,28],{extrapolateRight:"clamp"});
+  const cameraY = move % 2 === 0
+    ? interpolate(frame,[0,SCENE],[8,-8],{extrapolateRight:"clamp"})
+    : interpolate(frame,[0,SCENE],[-7,9],{extrapolateRight:"clamp"});
   const captionY = interpolate(frame,[8,30],[70,0],{extrapolateRight:"clamp"});
   return (
     <AbsoluteFill style={{backgroundColor:"#101525",overflow:"hidden"}}>
-      <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0,transform:`translateX(${cameraX}px) scale(${zoom})`,transformOrigin:"center center"}}>
+      <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0,transform:`translate(${cameraX}px, ${cameraY}px) scale(${zoom})`,transformOrigin:"center center"}}>
         <Backdrop place={data.place} frame={frame}/>
         <rect width={W} height={H} fill="#080C18" opacity=".22"/>
         <rect width={W} height={H} fill="url(#shade)"/>
         <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#060914" stopOpacity=".2"/><stop offset=".7" stopColor="#060914" stopOpacity="0"/><stop offset="1" stopColor="#060914" stopOpacity=".55"/></linearGradient></defs>
       </svg>
-      <div style={{position:"absolute",inset:0,transform:`translateX(${cameraX}px) scale(${zoom})`,transformOrigin:"center center"}}><CharacterStage art={data.art} frame={frame}/></div>
+      <div style={{position:"absolute",inset:0,transform:`translate(${cameraX}px, ${cameraY}px) scale(${zoom})`,transformOrigin:"center center"}}><CharacterStage art={data.art} frame={frame}/></div>
       <AbsoluteFill style={{pointerEvents:"none",background:"radial-gradient(ellipse at 50% 42%, transparent 38%, rgba(3,5,14,.28) 100%)"}}/>
       <AbsoluteFill style={{pointerEvents:"none",background:"linear-gradient(180deg, rgba(3,5,14,.34) 0%, transparent 18%, transparent 76%, rgba(3,5,14,.42) 100%)"}}/>
       <Dust frame={frame}/>
