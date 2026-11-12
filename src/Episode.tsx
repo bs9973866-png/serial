@@ -18,17 +18,34 @@ const Person: React.FC<PersonProps> = ({
   const flip = facing === "left" ? -1 : 1;
   return (
     <g transform={`translate(${x} ${y}) scale(${scale * flip} ${scale})`}>
-      <ellipse cx="0" cy="0" rx="94" ry="22" fill="#080916" opacity=".38"/>
-      <path d="M-47 -180 L-63 -35 Q-3 -6 58 -35 L43 -181 Q0 -211 -47 -180Z" fill={coat}/>
-      <path d="M-43 -40 L-55 0 L-33 0 L-12 -38 M14 -38 L34 0 L57 0 L43 -43" fill="#22263A"/>
-      <path d="M-31 -174 L-48 -103 L-26 -93 L-5 -151 M28 -174 L49 -108 L27 -96 L8 -150" fill={coat}/>
-      <path d="M-40 -183 Q-48 -256 0 -258 Q52 -255 43 -182 L29 -160 L-29 -160Z" fill={skin}/>
-      <path d="M-43 -205 Q-53 -274 5 -271 Q57 -267 47 -207 L31 -223 Q10 -242 -12 -222 L-32 -194Z" fill={hair}/>
-      <path d="M-40 -208 Q-57 -191 -39 -170 L-27 -181 L-28 -215 M35 -224 Q58 -211 42 -177 L29 -186Z" fill={hair}/>
-      <path d="M-22 -206 Q-12 -212 -4 -206 M12 -206 Q22 -212 29 -205" stroke="#3A2930" strokeWidth="4" fill="none" strokeLinecap="round"/>
-      <path d={mood === "smile" ? "M-9 -183 Q2 -173 14 -183" : mood === "sad" ? "M-8 -177 Q2 -184 13 -177" : "M-8 -180 L13 -180"} stroke="#8A4F55" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
-      <path d="M-28 -156 L0 -129 L29 -156" fill="none" stroke={accent} strokeWidth="5" opacity=".8"/>
-      <path d="M-24 -125 L-5 -111 L-24 -92 M24 -125 L5 -111 L24 -92" stroke={accent} strokeWidth="4" fill="none" opacity=".7"/>
+      <ellipse cx="0" cy="0" rx="91" ry="19" fill="#080916" opacity=".38"/>
+      {/* Legs, shoes and layered clothing give the characters a solid silhouette. */}
+      <path d="M-43 -78 L-48 -12 Q-49 0 -34 0 L-13 0 L-7 -75Z" fill="#252B40"/>
+      <path d="M7 -75 L13 0 L37 0 Q51 0 47 -13 L42 -78Z" fill="#252B40"/>
+      <path d="M-48 -13 Q-42 -4 -10 -7 L-8 0 L-38 3 Q-54 2 -48 -13Z" fill="#171B2B"/>
+      <path d="M12 -7 L45 -13 Q52 -2 39 3 L14 2Z" fill="#171B2B"/>
+      <path d="M-48 -3 Q-65 0 -69 12 Q-48 19 -15 12 L-13 3Z" fill="#111827"/>
+      <path d="M13 3 L15 12 Q48 19 69 12 Q65 0 48 -3Z" fill="#111827"/>
+      <path d="M-48 -177 Q0 -204 48 -177 L57 -73 Q4 -47 -56 -73Z" fill={coat}/>
+      <path d="M-36 -168 L-7 -139 L-23 -92 L-49 -111Z" fill={accent} opacity=".16"/>
+      <path d="M36 -168 L7 -139 L23 -92 L49 -111Z" fill="#080916" opacity=".12"/>
+      <path d="M-7 -174 L0 -137 L8 -174" fill="none" stroke={accent} strokeWidth="4" opacity=".7"/>
+      {/* Sleeves and hands */}
+      <path d="M-43 -169 Q-65 -157 -72 -111 L-86 -67 Q-89 -54 -76 -49 Q-63 -47 -58 -62 L-37 -111Z" fill={coat}/>
+      <path d="M43 -169 Q65 -157 72 -111 L86 -67 Q89 -54 76 -49 Q63 -47 58 -62 L37 -111Z" fill={coat}/>
+      <path d="M-83 -60 Q-91 -51 -82 -42 Q-72 -35 -63 -49 L-60 -62Z" fill={skin}/>
+      <path d="M83 -60 Q91 -51 82 -42 Q72 -35 63 -49 L60 -62Z" fill={skin}/>
+      <path d="M-28 -178 Q-31 -196 -25 -207 L25 -207 Q31 -196 28 -178" fill={skin}/>
+      {/* Face and hair */}
+      <path d="M-43 -224 Q-48 -263 0 -267 Q49 -264 43 -224 L37 -190 Q27 -166 0 -164 Q-28 -166 -38 -190Z" fill={skin}/>
+      <path d="M-46 -229 Q-57 -280 2 -280 Q58 -276 48 -222 L32 -237 Q11 -251 -12 -232 L-34 -210Z" fill={hair}/>
+      <path d="M-43 -230 Q-61 -210 -43 -177 L-29 -190 L-31 -225 M35 -240 Q59 -221 43 -181 L30 -194Z" fill={hair}/>
+      <path d="M-23 -214 Q-13 -220 -5 -214 M12 -214 Q22 -220 30 -213" stroke="#3A2930" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <circle cx="-14" cy="-207" r="3" fill="#282333"/><circle cx="20" cy="-207" r="3" fill="#282333"/>
+      <path d={mood === "smile" ? "M-9 -184 Q2 -173 14 -184" : mood === "sad" ? "M-8 -177 Q2 -184 13 -177" : "M-8 -180 L13 -180"} stroke="#8A4F55" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
+      <path d="M-28 -155 L0 -132 L29 -155" fill="none" stroke={accent} strokeWidth="5" opacity=".8"/>
+      <path d="M-24 -122 L-5 -108 L-24 -91 M24 -122 L5 -108 L24 -91" stroke={accent} strokeWidth="4" fill="none" opacity=".7"/>
+      <path d="M-48 -73 Q0 -55 48 -73" fill="none" stroke="#FFFFFF" strokeWidth="2" opacity=".12"/>
     </g>
   );
 };
