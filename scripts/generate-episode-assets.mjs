@@ -7,10 +7,14 @@ const root = process.cwd();
 // Load a local .env file without adding a runtime dependency. Existing CI secrets win.
 try {
   const envText = await readFile(path.join(root, ".env"), "utf8");
-  for (const line of envText.split(/\\r?\\n/)) {
-    const match = line.match(/^\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*?)\\s*$/);
-    if (!match || process.env[match[1]]) continue;
-    process.env[match[1]] = match[2].replace(/^(['"])(.*)\\1$/, "$2");
+  for (const line of envText.split("\n")) {
+    const clean = line.trim();
+    if (!clean || clean.startsWith("#")) continue;
+    const separator = clean.indexOf("=");
+    if (separator < 1) continue;
+    const key = clean.slice(0, separator).trim();
+    const value = clean.slice(separator + 1).trim().replace(/^([\'"])(.*)\\1$/, "$2");
+    if (!process.env[key]) process.env[key] = value;
   }
 } catch (error) {
   if (error?.code !== "ENOENT") throw error;
