@@ -223,17 +223,22 @@ const Scene: React.FC<{data:SceneData;index:number}> = ({data,index}) => {
   const frame = useCurrentFrame();
   const intro = interpolate(frame,[0,24],[0,1],{extrapolateRight:"clamp"});
   const outro = interpolate(frame,[SCENE-24,SCENE],[1,0],{extrapolateLeft:"clamp"});
-  const zoom = interpolate(frame,[0,SCENE],[1.035,1],{extrapolateRight:"clamp"});
+  const zoom = interpolate(frame,[0,SCENE],[1.055,1.015],{extrapolateRight:"clamp"});
+  const cameraX = interpolate(frame,[0,SCENE],[18,-18],{extrapolateRight:"clamp"});
   const captionY = interpolate(frame,[8,30],[70,0],{extrapolateRight:"clamp"});
   return (
     <AbsoluteFill style={{backgroundColor:"#101525",overflow:"hidden"}}>
-      <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0,transform:`scale(${zoom})`}}>
+      <svg viewBox="0 0 1920 1080" width="100%" height="100%" style={{position:"absolute",inset:0,transform:`translateX(${cameraX}px) scale(${zoom})`,transformOrigin:"center center"}}>
         <Backdrop place={data.place} frame={frame}/>
         <rect width={W} height={H} fill="#080C18" opacity=".22"/>
         <rect width={W} height={H} fill="url(#shade)"/>
         <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#060914" stopOpacity=".2"/><stop offset=".7" stopColor="#060914" stopOpacity="0"/><stop offset="1" stopColor="#060914" stopOpacity=".55"/></linearGradient></defs>
       </svg>
       <CharacterStage art={data.art} frame={frame}/>
+      <AbsoluteFill style={{pointerEvents:"none",background:"radial-gradient(ellipse at 50% 42%, transparent 38%, rgba(3,5,14,.28) 100%)"}}/>
+      <AbsoluteFill style={{pointerEvents:"none",background:"linear-gradient(180deg, rgba(3,5,14,.34) 0%, transparent 18%, transparent 76%, rgba(3,5,14,.42) 100%)"}}/>
+      <div style={{position:"absolute",top:0,left:0,right:0,height:22,background:"#050711",opacity:.72}}/>
+      <div style={{position:"absolute",bottom:0,left:0,right:0,height:22,background:"#050711",opacity:.72}}/>
       <AbsoluteFill style={{justifyContent:"flex-end",padding:"0 120px 110px",opacity:intro*outro,transform:`translateY(${captionY}px)`}}>
         <div style={{width:10,height:80,background:"#D7A7C9",marginBottom:24,boxShadow:"0 0 24px #D7A7C9"}}/>
         <div style={{fontFamily:"Arial, sans-serif",fontSize:23,letterSpacing:9,color:"#D7A7C9",fontWeight:700,marginBottom:18}}>{String(index+1).padStart(2,"0")} / 10　{data.title}</div>
