@@ -26,3 +26,12 @@ Place approved visual assets in this directory. Keep filenames stable so the Rem
 - Backgrounds should be 16:9, ideally 1920×1080.
 - Do not bake subtitles, logos, dialogue, or readable notes into generated images.
 - Do not rename files without updating the asset manifest and composition.
+
+
+## Generated episode media
+
+The generation script writes these optional files automatically:
+- `audio/scene-01.mp3` through `audio/scene-10.mp3` — Fish Audio Russian narration, one segment per scene.
+- `scenes/scene-01.png` through `scenes/scene-10.png` — fal.ai / FLUX cinematic environment backgrounds.
+
+Do not add API keys to this folder or commit them. The Remotion composition loads these files only when the AI render props are enabled.
