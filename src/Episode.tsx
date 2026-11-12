@@ -4,7 +4,7 @@ import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame}
 const W = 1920;
 const H = 1080;
 const FPS = 30;
-const SCENE = 32 * FPS;
+const SCENE = 40 * FPS;
 
 type PersonProps = {
   x: number; y: number; scale?: number; coat: string; hair: string;
@@ -171,16 +171,21 @@ type SceneData = {
 };
 
 const scenes:SceneData[] = [
-  {place:0,title:"ЧУЖАЯ ПАРТА",line:"Я заметил её не в тот день, когда она вошла в класс.",sub:"А в тот, когда понял: она уже знает обо мне кое-что.",art:"alone"},
-  {place:1,title:"ОБЫЧНОЕ УТРО",line:"Кирилл умел находить слабые места. Моё — тишина.",sub:"— Эй, художник. Опять прячешься за тетрадкой?",art:"tease"},
-  {place:0,title:"НОВОЕ МЕСТО",line:"Она выбрала парту рядом со мной. Хотя свободных было полно.",sub:"— Здесь занято? — спросила Лера.",art:"meet"},
-  {place:3,title:"МЕЖДУ СТРОК",line:"В библиотеке она увидела рисунок, который я никому не показывал.",sub:"— Ты всё ещё рисуешь такие окна?",art:"talk"},
-  {place:1,title:"ЧУЖИЕ СЛОВА",line:"Кирилл сказал, что Лера общается со мной из жалости.",sub:"Я сделал вид, что мне всё равно. Получилось плохо.",art:"tease"},
-  {place:0,title:"ПОСЛЕ ЗВОНКА",line:"Она оставила на моей парте маленькую записку.",sub:"«Приходи в библиотеку. Мне нужно кое-что спросить».",art:"note"},
-  {place:3,title:"СТАРЫЙ РИСУНОК",line:"Лера узнала рисунок. И почему-то сразу перестала улыбаться.",sub:"— Откуда он у тебя? — тихо спросила она.",art:"reveal"},
-  {place:7,title:"ТО, ЧТО ПОМНИТ ОНА",line:"Она рассказала, что видела этот рисунок много лет назад.",sub:"— Ты тогда сказал, что однажды закончишь его.",art:"talk"},
-  {place:8,title:"ПОЧЕРК",line:"Вечером я нашёл в тетради ещё одну записку.",sub:"Почерк был мой. Но я не помнил, чтобы писал это.",art:"note"},
-  {place:9,title:"НЕЗАКОНЧЕННАЯ ИСТОРИЯ",line:"На листке стояла дата трёхлетней давности.",sub:"«Если ты это читаешь — значит, Лера всё-таки вернулась».",art:"end"}
+  {place:0,title:"РАНЬШЕ ВСЕХ",line:"Я пришёл в школу до звонка. И снова нарисовал то самое окно.",sub:"Тогда я ещё не знал, что кто-то помнит этот рисунок лучше меня.",art:"alone"},
+  {place:1,title:"КИРИЛЛ",line:"Кирилл заметил скетчбук и сразу нашёл, над чем пошутить.",sub:"— Ты когда-нибудь рисуешь что-нибудь, кроме окон?",art:"tease"},
+  {place:0,title:"ОНА ВЕРНУЛАСЬ",line:"Лера вошла в класс и выбрала место рядом со мной.",sub:"Она произнесла моё имя так, будто мы виделись вчера.",art:"meet"},
+  {place:3,title:"ЗНАКОМАЯ ЛИНИЯ",line:"В библиотеке Лера увидела страницу, которую я никому не показывал.",sub:"— Ты всё ещё рисуешь именно это окно?",art:"talk"},
+  {place:1,title:"НЕ ЛЕЗЬ В ЭТО",line:"Кирилл вдруг перестал шутить, когда услышал её имя.",sub:"— Просто не задавай ей вопросов о прошлом.",art:"tease"},
+  {place:0,title:"ЗАПИСКА",line:"После уроков на моей парте лежал сложенный листок.",sub:"«Библиотека. После звонка. Пожалуйста, приходи один».",art:"note"},
+  {place:3,title:"СТАРЫЙ РИСУНОК",line:"Лера узнала каждую линию и даже маленькую ошибку в углу.",sub:"— Мы рисовали его вместе. Ты правда не помнишь?",art:"reveal"},
+  {place:3,title:"ТРИ ГОДА НАЗАД",line:"Она рассказала о дне, который для неё до сих пор был важным.",sub:"Но в моей памяти не было ни библиотеки, ни той встречи.",art:"talk"},
+  {place:1,title:"ПО ДОРОГЕ ДОМОЙ",line:"Мы вышли из библиотеки вместе. Лера шла медленно, будто подбирала слова.",sub:"— Я не хотела возвращаться, пока не буду уверена.",art:"walk"},
+  {place:3,title:"ФОТОГРАФИЯ",line:"На старом снимке было то же окно. И двое детей за столом.",sub:"Одного из них Лера узнала сразу. Второго она попросила узнать меня.",art:"reveal"},
+  {place:1,title:"КИРИЛЛ ТОЖЕ ПОМНИТ",line:"В коридоре Кирилл случайно проговорился, что знал о её возвращении.",sub:"— Я думал, она больше сюда не придёт, — тихо сказал он.",art:"walk"},
+  {place:0,title:"ПОСЛЕДНИЙ УРОК",line:"Я спросил Кирилла, почему он всё это время молчал.",sub:"Он ответил только одно: «Потому что ты сам просил не рассказывать».",art:"talk"},
+  {place:9,title:"ДОМА",line:"Вечером я достал старые тетради и начал искать хоть одну зацепку.",sub:"Под нижней полкой стола нашёлся потрёпанный скетчбук.",art:"note"},
+  {place:9,title:"ЕЩЁ ОДНА СТРАНИЦА",line:"Между рисунками лежала фотография и листок, сложенный вчетверо.",sub:"На обороте стояла дата. Три года назад.",art:"note"},
+  {place:9,title:"ЕСЛИ ТЫ ЭТО ЧИТАЕШЬ",line:"На листке был мой почерк. И фраза, от которой стало не по себе.",sub:"«Если ты это читаешь — значит, Лера всё-таки вернулась».",art:"end"}
 ];
 
 const CharacterStage: React.FC<{art:SceneData["art"];frame:number}> = ({art,frame}) => {
@@ -322,7 +327,7 @@ const Scene: React.FC<{data:SceneData;index:number;voiceover?:boolean;aiVisuals?
       <div style={{position:"absolute",bottom:0,left:0,right:0,height:22,background:"#050711",opacity:.72}}/>
       <AbsoluteFill style={{justifyContent:"flex-end",padding:"0 120px 110px",opacity:intro*outro,transform:`translateY(${captionY}px)`}}>
         <div style={{width:10,height:80,background:"#D7A7C9",marginBottom:24,boxShadow:"0 0 24px #D7A7C9"}}/>
-        <div style={{fontFamily:"Arial, sans-serif",fontSize:23,letterSpacing:9,color:"#D7A7C9",fontWeight:700,marginBottom:18}}>{String(index+1).padStart(2,"0")} / 10　{data.title}</div>
+        <div style={{fontFamily:"Arial, sans-serif",fontSize:23,letterSpacing:9,color:"#D7A7C9",fontWeight:700,marginBottom:18}}>{String(index+1).padStart(2,"0")} / {scenes.length}　{data.title}</div>
         <div style={{fontFamily:"Arial, sans-serif",fontSize:43,lineHeight:1.28,color:"#F6F1F4",fontWeight:500,maxWidth:1450,textShadow:"0 5px 25px #000"}}>{data.line}</div>
         {data.sub && <div style={{fontFamily:"Arial, sans-serif",fontSize:29,lineHeight:1.35,color:"#C9C6D4",marginTop:20,maxWidth:1250}}>{data.sub}</div>}
       </AbsoluteFill>
